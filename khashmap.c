@@ -154,7 +154,7 @@ static int __init khashmap_module_init(void)
 					     sizeof(struct khashmap_item),
 					     0, 0, NULL);
         if (unlikely(!hlist_cachep)) {
-                printk(KERN_ERR "hlist: failed to create slab cache\n");
+                printk(KERN_ERR "khashmap: failed to create slab cache\n");
                 return -ENOMEM;
         }
         return 0;
