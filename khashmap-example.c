@@ -112,7 +112,7 @@ static int hash_init(void)
 	/* Fill the hash map with random values */
 	for (i = 0; i < 1000; i++) {
 		unsigned long key = get_random_int() % 1000;
-		unsigned long val = get_random_int() % 1000;
+		unsigned long val = get_random_int() % 1000 + 1;
 		int ret;
 
 		ret = khashmap_add(&hash, key, (void *)val, GFP_KERNEL);
