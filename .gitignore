@@ -1,0 +1,17 @@
+.khashmap.ko.cmd
+.khashmap.mod.o.cmd
+.khashmap.o.cmd
+.tmp_versions/
+Module.symvers
+khashmap.ko
+khashmap.mod.c
+khashmap.mod.o
+khashmap.o
+modules.order
+.khashmap-example.ko.cmd
+.khashmap-example.mod.o.cmd
+.khashmap-example.o.cmd
+khashmap-example.ko
+khashmap-example.mod.c
+khashmap-example.mod.o
+khashmap-example.o
