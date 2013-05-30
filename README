@@ -1,0 +1,36 @@
+khashmap
+========
+
+This kernel module provide a generic infrastructure to manage key->value
+items.
+
+See khashmap.h for details.
+
+Example
+=======
+
+$ make
+make -C /lib/modules/`uname -r`/build SUBDIRS=/home/righiandr/src/linux/khashmap modules
+make[1]: Entering directory `/usr/src/linux-headers-3.8.0-22-generic'
+  CC [M]  /home/righiandr/src/linux/khashmap/khashmap.o
+  CC [M]  /home/righiandr/src/linux/khashmap/khashmap-example.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/righiandr/src/linux/khashmap/khashmap-example.mod.o
+  LD [M]  /home/righiandr/src/linux/khashmap/khashmap-example.ko
+  CC      /home/righiandr/src/linux/khashmap/khashmap.mod.o
+  LD [M]  /home/righiandr/src/linux/khashmap/khashmap.ko
+make[1]: Leaving directory `/usr/src/linux-headers-3.8.0-22-generic'
+$ sudo insmod khashmap.ko
+$ sudo insmod khashmap-example.ko
+$ cat /proc/hashmap
+...
+  867 -> 287
+  864 -> 170
+  487 -> 367
+  720 -> 916
+  432 -> 132
+  953 -> 158
+  55 -> 865
+  288 -> 287
+key=867 value=735
