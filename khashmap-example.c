@@ -53,7 +53,7 @@ static unsigned int get_random_int(void)
 static void hash_dump(struct seq_file *m)
 {
 	struct khashmap_item *item;
-	struct hlist_node *node;
+	struct hlist_node *node = node;
 	int i;
 
 	khashmap_for_each_entry(&hash, i, node, item)

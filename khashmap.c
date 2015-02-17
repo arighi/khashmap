@@ -50,11 +50,11 @@ EXPORT_SYMBOL(khashmap_empty);
 static struct khashmap_item *
 khashmap_find_item(const struct khashmap *hlist, u64 key)
 {
-        struct hlist_node *node;
+	/* Silent preprocessor macro warning */
+        struct hlist_node *node = node;
         struct khashmap_item *item;
 
-        hlist_for_each_entry(item, node,
-			     &hlist->hash[khashmap_hashfn(hlist, key)], hlist)
+	khashmap_for_each_key(hlist, key, node, item)
                 if (item->key == key)
                         return item;
 	return NULL;

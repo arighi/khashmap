@@ -24,6 +24,7 @@
 
 #include <linux/types.h>
 #include <linux/list.h>
+#include <linux/version.h>
 
 /**
  * struct khashmap - define a key-value hash map
@@ -84,10 +85,18 @@ struct khashmap_item {
  * @__node: a hlist_node object used to iterate over the hash list items.
  * @__item: a khashmap_item object representing each item in the hash list.
  */
-#define khashmap_for_each_entry(__hash,	__pos, __node, __item)		\
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
+#define khashmap_for_each_entry(__hash, __pos, __node, __item)		\
         for (__pos = 0; __pos < khashmap_size(__hash); __pos++)		\
                 hlist_for_each_entry(__item, __node,			\
 				     &(__hash)->hash[(__pos)], hlist)
+#else
+#define khashmap_for_each_entry(__hash, __pos, __node, __item)		\
+        for (__pos = 0, __node = __node;				\
+	     __pos < khashmap_size(__hash); __pos++)			\
+                hlist_for_each_entry(__item, &(__hash)->hash[(__pos)], hlist)
+#endif
+
 /**
  * khashmap_for_each_entry - iterate over all the khashmap items (safe against
  * removals)
@@ -97,11 +106,38 @@ struct khashmap_item {
  * @__p: another hlist_node object used as a temporary storage.
  * @__item: a khashmap_item object representing each item in the hash list.
  */
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
 #define khashmap_for_each_entry_safe(__hash,				\
 				     __pos, __node, __p, __item)	\
 	for (__pos = 0; __pos < khashmap_size(__hash); __pos++)		\
 		hlist_for_each_entry_safe(__item, __p,			\
 				  __node, &(__hash)->hash[(__pos)], hlist)
+#else
+#define khashmap_for_each_entry_safe(__hash,				\
+				     __pos, __node, __p, __item)	\
+	for (__pos = 0, __node = __node;				\
+	     __pos < khashmap_size(__hash); __pos++)			\
+		hlist_for_each_entry_safe(__item, __p,			\
+				  &(__hash)->hash[(__pos)], hlist)
+#endif
+
+/**
+ * khashmap_find_key - iterate over the list of conflicting hash key items
+ * @__hash: the khashmap object
+ * @__key: the key to search
+ * @__node: a hlist_node object used to iterate over the hash list items.
+ * @__item: a khashmap_item object representing each item in the hash list.
+ */
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
+#define khashmap_for_each_key(__hash, __key, __node, __item)		\
+        hlist_for_each_entry(__item, __node,				\
+			     &hlist->hash[khashmap_hashfn(__hash, __key)], hlist)
+#else
+#define khashmap_for_each_key(__hash, __key, __node, __item)		\
+        hlist_for_each_entry(__item,					\
+			     &__hash->hash[khashmap_hashfn(__hash, __key)], hlist)
+#endif
+
 
 /**
  * khashmap_size - return the amount of elements in the hash array
